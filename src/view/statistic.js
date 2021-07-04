@@ -1,37 +1,12 @@
-const createUserStatus = (num) => {
- return num === 0 ?  null:
-  num >= 1 && num <= 10 ? 'novice':
-  num >= 11 && num <= 20 ? 'fan': 'movie buff';
-}
-
-const getFavoriteGenere = (list)=>{
-  const arr = [];
-  list.forEach((item) => {
-    if(item.isWatched){
-      return arr.push(item.genre);
-    }
-  });
-  let  counts = {}, max = 0, res;
-  for (let v in arr) {
-  counts[arr[v]] = (counts[arr[v]] || 0) + 1;
-  if (counts[arr[v]] > max) {
-    max = counts[arr[v]];
-    res = arr[v];
-  }
-}
-return res;
-}
 
 export const createStatistic = (cards) => {
-const listHistory = cards.filter((item)=> item.isWatched);
-const totalDuration = listHistory.reduce((start,item)=> start +=item.runTime, 0);
-console.log(createUserStatus(listHistory.length));
+  const { History, generes, UserStatus, hour, minute} = cards
   return `
   <section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${createUserStatus(listHistory.length)}</span>
+      <span class="statistic__rank-label">${UserStatus}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -56,15 +31,15 @@ console.log(createUserStatus(listHistory.length));
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">${listHistory.length}<span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${History}<span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">${Math.floor(totalDuration / 60)} <span class="statistic__item-description">h</span>${totalDuration % 60}<span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${hour} <span class="statistic__item-description">h</span>${minute}<span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">${getFavoriteGenere(cards)}</p>
+        <p class="statistic__item-text">${generes}</p>
       </li>
     </ul>
 

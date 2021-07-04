@@ -1,8 +1,4 @@
-const createUserStatus = (num) => {
- return num === 0 ?  null:
-  num >= 1 && num <= 10 ? 'novice':
-  num >= 11 && num <= 20 ? 'fan': 'movie buff';
-}
+import { createUserStatus } from '../utils.js';
 
 export const createProfile = (cards) => {
   const listHistory = cards.filter((item)=> item.isWatched);
@@ -12,7 +8,7 @@ export const createProfile = (cards) => {
         <p class="profile__rating">${createUserStatus(listHistory.length)}</p>
         <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
       </section>
-    `
-  }
+    ` }
+  return '';
 }
 

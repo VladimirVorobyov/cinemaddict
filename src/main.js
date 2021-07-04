@@ -10,12 +10,15 @@ import { createContainerComment } from './view/popup-comment.js';
 import { createComment } from './view/comment.js';
 import { createFilm } from './mock/film.js';
 import { commentsList } from './mock/comment.js';
+import { createNavigationFilter } from './mock/filter.js';
+import { createButton } from './view/show.js';
 
-const NUM_CARD = 10;
+const NUM_CARD = 20;
+const STEP_CARD = 5;
 const films = new Array(NUM_CARD).fill().map(createFilm);
 const topRating = films.slice().sort((a,b)=> b.rating - a.rating);
 const topComment = films.slice().sort((a,b)=> b.commentID.length - a.commentID.length);
-
+const navigationFilter = createNavigationFilter(films);
 
 const render = (container, template, position = 'beforeend') => {
   container.insertAdjacentHTML(position,template,'afterend');
@@ -29,19 +32,38 @@ render(footer, createFooter());
 
 const createMain  = () => {
   main.innerHTML ='';
-  render(main,createNavigation(films));
+  render(main,createNavigation(navigationFilter));
   render(main, createSort())
   render(main, createFilmsContainer());
+  const filmsList = document.querySelector('.films-list');
   const mostCommented = document.querySelector('.most-commented');
   const topRated = document.querySelector('.top-rated');
   const filmsListContainer = document.querySelector('.films-list__container');
-  for(let i = 0; i<NUM_CARD; i++){
+
+  for(let i = 0; i<Math.min(films.length,STEP_CARD) ; i++){
     render(filmsListContainer, createFilmCard(films[i]));
     if(i<2){
       render(mostCommented, createFilmCard(topComment[i]));
       render(topRated, createFilmCard(topRating[i]));
     }
   }
+
+  if(films.length>STEP_CARD){
+    let count = STEP_CARD;
+    render(filmsList, createButton());
+    const buttonShow = filmsList.querySelector('.films-list__show-more');
+    buttonShow.addEventListener('click',(evt)=>{
+      evt.preventDefault();
+      films.slice(count, count + STEP_CARD)
+           .forEach((item)=> render(filmsListContainer, createFilmCard(item)));
+    count += STEP_CARD;
+
+    if (count >= films.length) {
+      buttonShow.remove();
+    }
+    })
+  }
+
 }
 createMain();
 
@@ -59,10 +81,10 @@ createPopup();
 
 const createStat = () => {
   main.innerHTML ='';
-  render(main,createNavigation(films));
+  render(main,createNavigation(navigationFilter));
   document.querySelector('.main-navigation__additional')
   .classList.add('main-navigation__additional--active');
-  render(main,createStatistic(films));
+  render(main,createStatistic(navigationFilter));
   document.querySelector('.main-navigation__item')
   .classList.remove('main-navigation__item--active');
 }
