@@ -1,8 +1,8 @@
+import Abstract from "./abstract"
 
-export const createStatistic = (cards) => {
+const createStatistic = (cards) => {
   const { History, generes, UserStatus, hour, minute} = cards
-  return `
-  <section class="statistic">
+  return `<section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
@@ -47,6 +47,15 @@ export const createStatistic = (cards) => {
       <canvas class="statistic__chart" width="1000"></canvas>
     </div>
 
-  </section>
-  `
+  </section>`
+}
+
+export default class Statistic extends Abstract{
+  constructor (cards){
+    super();
+    this._cards = cards;
+  }
+  getTemplate(){
+    return createStatistic(this._cards);
+  }
 }

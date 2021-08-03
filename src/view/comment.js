@@ -1,8 +1,9 @@
-export const createComment = (list,item) => {
+import Abstract from "./abstract";
+
+const createComment = (list,item) => {
   const elem = list.find((a) => a.id === item);
   const { title, autor, dateComment, emotion } = elem
-  return `
-          <li class="film-details__comment">
+  return `<li class="film-details__comment">
             <span class="film-details__comment-emoji">
               <img src="${emotion}" width="55" height="55" alt="emoji-smile">
             </span>
@@ -14,7 +15,17 @@ export const createComment = (list,item) => {
                 <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>
-          </li>
-  `
+          </li>`
+}
+
+export default class CommentArr extends Abstract{
+  constructor(list,item){
+    super();
+    this._list = list;
+    this._item = item;
+  }
+  getTemplate(){
+    return createComment(this._list,this._item)
+  }
 }
 

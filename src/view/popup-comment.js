@@ -1,6 +1,7 @@
-export const createContainerComment = (item) => {
-  return `
-            <div class="film-details__bottom-container">
+import Abstract from "./abstract"
+
+const createContainerComment = (item) => {
+  return `<div class="film-details__bottom-container">
                 <section class="film-details__comments-wrap">
                   <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${item.commentID.length}</span></h3>
 
@@ -37,6 +38,15 @@ export const createContainerComment = (item) => {
                     </div>
                   </div>
                 </section>
-              </div>
-            `
+              </div>`
+}
+
+export default class ContainerComment extends Abstract{
+  constructor(item){
+    super();
+    this._item = item
+  }
+  getTemplate(){
+    return createContainerComment(this._item);
+  }
 }

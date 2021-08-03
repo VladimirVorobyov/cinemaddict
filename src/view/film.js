@@ -1,8 +1,9 @@
-export const createFilmCard = (card) => {
+import Abstract from "./abstract";
+
+const createFilmCard = (card) => {
   const {movieTitle,rating, year, time, genre,commentID, poster, mainDescription,isWatchlist,isWatched,isFavorites} = card;
   const getClass = (a) => a ? 'film-card__controls-item--active':'';
-return `
-        <article class="film-card">
+return `<article class="film-card">
           <h3 class="film-card__title">${movieTitle}</h3>
           <p class="film-card__rating">${rating}</p>
           <p class="film-card__info">
@@ -18,8 +19,24 @@ return `
             <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${getClass(isWatched)}" type="button">Mark as watched</button>
             <button class="film-card__controls-item button film-card__controls-item--favorite ${getClass(isFavorites)}" type="button">Mark as favorite</button>
           </div>
-        </article>
-      `
+        </article>`
 }
 
-
+export default class FilmCard extends Abstract {
+  constructor (cards){
+    super();
+    this._cards = cards;
+    this._films = this._films.bind(this);
+  }
+  getTemplate(){
+    return createFilmCard(this._cards);
+  }
+  _films(evt){
+     evt.preventDefault();
+     this._callback.click();
+  }
+  setClickFilm(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('img').addEventListener(`click`, this._films);
+  }
+}

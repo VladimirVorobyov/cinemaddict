@@ -1,16 +1,16 @@
-export const createGenres = (listGeneres) => {
+import Abstract from "./abstract";
+
+const createGenres = (listGeneres) => {
   return listGeneres.map((elem) => `<span class="film-details__genre">${elem}</span>`).join('');
 };
 
-export const createFilmDetails = (card) => {
+const createFilmDetails = (card) => {
   const {movieTitle,rating, time, ageEnter, poster, description, isWatchlist, isWatched,
     isFavorites, director,releaseDate, writers,generesPopup, actor,country} = card;
   const getChecked = (item) => item ? 'checked' : '';
   const componentGeneres = createGenres(generesPopup);
   const getNameGenere = () => generesPopup.length <= 1 ? 'Genre' : 'Genres';
-
-  return `
-          <section class="film-details">
+  return `<section class="film-details">
           <form class="film-details__inner" action="" method="get">
             <div class="film-details__top-container">
               <div class="film-details__close">
@@ -87,7 +87,26 @@ export const createFilmDetails = (card) => {
 
 
           </form>
-        </section>
-  `
+        </section> `
 }
 
+export default class FilmDetails extends Abstract {
+  constructor(card){
+    super();
+    this._card = card;
+    this._popup = this._popup.bind(this);
+  }
+  getTemplate(){
+    return createFilmDetails(this._card);
+  }
+   _popup(evt) {
+    evt.preventDefault();
+
+    this._callback.click();
+  }
+
+  setClickDetali(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener(`click`, this._popup);
+  }
+}
